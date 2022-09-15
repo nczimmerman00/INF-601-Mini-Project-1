@@ -6,21 +6,28 @@
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-# Request msft ticker data
-data = yf.download('MSFT', start='2022-08-30', end='2022-09-14')
+tickers = ['MSFT', 'AAPL', 'IBM', 'GOOGL', 'AMZN']
 
-# Pulling prices from the ticker data
-msftPrices = []
+for ticker in tickers:
+    # Request ticker data
+    data = yf.download(ticker, start='2022-08-30', end='2022-09-14')
 
-for price in data['Adj Close']:
-    msftPrices.append(price)
+    # Grab ticker closing prices
+    dataPrices = []
+    for price in data['Adj Close']:
+        dataPrices.append(price)
 
-print(msftPrices)
+    # Create numpy array and plot it
+    dataArray = np.array(dataPrices)
+    plt.plot(dataArray)
 
-# Creating numpy array and plotting it
-msftArray = np.array(msftPrices)
-plt.plot(msftArray)
-# Use path instead of the below code
-plt.savefig('charts/msft.png')
-plt.show()
+    # Check to make sure the charts directory is created.
+    pathString = os.getcwd() + '/charts/'
+    if not os.path.exists(pathString):
+        os.mkdir(pathString)
+
+    # Save graph in charts folder
+    pathString += ticker + '.png'
+    plt.savefig(pathString)

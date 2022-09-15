@@ -2,18 +2,38 @@
 # Nicholas Zimmerman
 # Mini Project 1
 
-
+from datetime import datetime, timedelta
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import pandas_market_calendars as mcal
 
 # These are the tickers to be looked up and graphed.
 tickers = ['MSFT', 'AAPL', 'IBM', 'GOOGL', 'AMZN']
 
+# Get start and end dates
+endDate = datetime.now() - timedelta(days=1)
+days = timedelta(days=10)
+startDate = endDate - days
+endDateString = endDate.strftime("%Y-%m-%d")
+startDateString = startDate.strftime('%Y-%m-%d')
+
+# Get market calendar
+nyse = mcal.get_calendar('NYSE')
+calendar = nyse.schedule(start_date=startDateString, end_date=endDateString)
+while calendar.axes[0].size != 11:
+    days += timedelta(days=1)
+    startDate = endDate - days
+    startDateString = startDate.strftime('%Y-%m-%d')
+    calendar = nyse.schedule(start_date=startDateString, end_date=endDateString)
+
+# Move back startDate until 10 trading days are present.
+
+
 for ticker in tickers:
     # Request ticker data
-    data = yf.download(ticker, start='2022-08-30', end='2022-09-14')
+    data = yf.download(ticker, start=startDateString, end=endDateString)
 
     # Grab ticker closing prices and dates
     dataPrices = []

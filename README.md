@@ -1,1 +1,4 @@
-# INF-601-Mini-Project-1
+INF601 - Advanced Programming in Python
+Nicholas Zimmerman
+Mini Project
+

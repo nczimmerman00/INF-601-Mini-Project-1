@@ -12,7 +12,7 @@ import pandas_market_calendars as mcal
 # These are the tickers to be looked up and graphed.
 tickers = ['MSFT', 'AAPL', 'IBM', 'GOOGL', 'AMZN']
 
-# Get start and end dates
+# Get initial start and end dates
 endDate = datetime.now() - timedelta(days=1)
 days = timedelta(days=10)
 startDate = endDate - days
@@ -22,14 +22,12 @@ startDateString = startDate.strftime('%Y-%m-%d')
 # Get market calendar
 nyse = mcal.get_calendar('NYSE')
 calendar = nyse.schedule(start_date=startDateString, end_date=endDateString)
+# Move back startDate until 10 trading days are present.
 while calendar.axes[0].size != 11:
     days += timedelta(days=1)
     startDate = endDate - days
     startDateString = startDate.strftime('%Y-%m-%d')
     calendar = nyse.schedule(start_date=startDateString, end_date=endDateString)
-
-# Move back startDate until 10 trading days are present.
-
 
 for ticker in tickers:
     # Request ticker data
